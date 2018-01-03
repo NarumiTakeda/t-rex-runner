@@ -13,6 +13,13 @@ typedef struct{
     int nivel;
 }GAME_INFO;
 
+typedef struct{
+    int x;
+    int y;
+    int obstaculo;
+    int estado;     // se esta no jogo ou nao
+}OBSTACULO;
+
 void setCursor(int x, int y);
 void imprimeChao();
 void imprimeDino(int x, int y);
@@ -26,7 +33,7 @@ void imprimePterotactilo(int x, int y);
 void apagaPterotactilo(int x, int y);
 void imprimeCactoG(int x, int y);
 void apagaCactoG(int x, int y);
-int imprimeObstaculo(int x, int y);
+int imprimeObstaculo(int x, int y, int obstaculo);
 void apagaObstaculo(int x, int y, int obstaculo);
 
 
@@ -269,9 +276,8 @@ void apagaCactoG(int x, int y)
     }
 }
 
-int imprimeObstaculo(int x, int y)
+int imprimeObstaculo(int x, int y, int obstaculo)
 {
-    int obstaculo = 2;
 
     switch(obstaculo)
     {
@@ -285,7 +291,9 @@ int imprimeObstaculo(int x, int y)
         imprimeAerolito(x, y);
         break;
     case 4:
-        imprimePterotactilo(x, y);
+        imprimePterotactilo(x, y - 1);
+        break;
+    case 5:
         break;
     }
     return obstaculo;
@@ -305,7 +313,9 @@ void apagaObstaculo(int x, int y, int obstaculo)
         apagaAerolito(x, y);
         break;
     case 4:
-        apagaPterotactilo(x, y);
+        apagaPterotactilo(x, y - 1);
+        break;
+    case 5:
         break;
     }
 }
@@ -313,9 +323,19 @@ void apagaObstaculo(int x, int y, int obstaculo)
 void jogo()
 {
     GAME_INFO status = {3, 0, 1};
-
-    int obstaculo, Obs_x = 99, Obs_y = 14;
+    OBSTACULO Obs1, Obs2, Obs3;
+    srand(time(NULL));
+    int Obs_min = 1, Obs_max = 5, pos_min = 25, pos_max = 75, pos = 0; // distancia minima e maxima entre os obstaculos
     int Dino_x = 15, Dino_y = 14, Dino_pulo = 0, ciclo_Pulo = 0, Dino_down = 0, flag_Dino_Down;
+    int velocidade = 45;
+
+    Obs1.x = 0;
+
+    Obs2.x = 99;
+    Obs2.estado = 0;
+
+    Obs3.x = 99;
+
 
     system("cls");
     imprimeChao();
@@ -327,31 +347,73 @@ void jogo()
         printf("Pontos: %d\n", status.pontuacao);
         printf("Nivel: %d\n", status.nivel);
 
-
-        if(((status.pontuacao + 1) % 500) == 0){
+        if(((status.pontuacao + 1) % 500) == 0)     //vidas
             status.vidas++;
-        }
 
-        if(((status.pontuacao + 1) % 100) == 0){
+        if(((status.pontuacao + 1) % 100) == 0){     //nivel
             status.nivel++;
+            if(status.nivel <= 6)
+                velocidade -= 5;
+
         }
 
-        if(Obs_x == 0){
-            Obs_x = 99;
+
+        if(Obs1.x == 0){
+            Obs1.obstaculo = Obs_min + (rand() % ((Obs_max - 2) - Obs_min + 1)); //geracao aleatoria dos obstaculos, - 1 eh para ssempre vir um obstaculo
+            if(Obs1.obstaculo == 3 || Obs1.obstaculo == 4){
+                Obs1.y = 11 + (rand() % (14 - 11 + 1));         //variar a altura dos obstaculos voadores
+            }else
+                Obs1.y = 14;
+            Obs1.x = 99;
         }
 
-        obstaculo = imprimeObstaculo(Obs_x, Obs_y);
+        imprimeObstaculo(Obs1.x, Obs1.y, Obs1.obstaculo);
 
-        if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_SPACE)){
+//Obstaculo 2
+        if(Obs1.x == 50)
+            pos = pos_min + (rand() % (pos_max - pos_min + 1));
+
+        if(Obs1.x == pos && Obs2.estado == 0){
+            Obs2.obstaculo = Obs_min + (rand() % (Obs_max - Obs_min + 1));  //geracao aleatoria dos obstaculos
+            if(Obs2.obstaculo == 3 || Obs2.obstaculo == 4){
+                Obs2.y = 12 + (rand() % (14 - 12 + 1));         //variar a altura dos obstaculos voadores
+            }else
+                Obs2.y = 14;
+            Obs2.x = 99;
+            Obs2.estado = 1;
+        }
+        if(Obs2.estado == 1)
+            imprimeObstaculo(Obs2.x, Obs2.y, Obs2.obstaculo);
+
+//Obstaculo 3
+        if(status.nivel > 6){
+
+            if(Obs2.x == 50)
+                pos = pos_min + (rand() % (pos_max - pos_min + 1));
+
+            if(Obs2.x == pos && Obs3.estado == 0){
+                Obs3.obstaculo = Obs_min + (rand() % (Obs_max - Obs_min + 1));  //geracao aleatoria dos obstaculos
+                if(Obs3.obstaculo == 3 || Obs3.obstaculo == 4){
+                    Obs3.y = 12 + (rand() % (14 - 12 + 1));         //variar a altura dos obstaculos voadores
+                }else
+                    Obs3.y = 14;
+                Obs3.x = 99;
+                Obs3.estado = 1;
+            }
+            if(Obs3.estado == 1)
+                imprimeObstaculo(Obs3.x, Obs3.y, Obs3.obstaculo);
+        }
+
+//Dinossauro
+        if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_SPACE))
             Dino_pulo = 1;
-        }
+
 
         if(GetKeyState(VK_DOWN) || GetKeyState('C')){
             Dino_down = 1;
             flag_Dino_Down = 1;
         }else
             Dino_down = 0;
-
 
         if(Dino_pulo == 0 && Dino_down == 0){
             imprimeDino(Dino_x, Dino_y);
@@ -362,8 +424,8 @@ void jogo()
                         imprimeDino(Dino_x, Dino_y);
                       }
 
+        Sleep(velocidade);
 
-        Sleep(50);
 //rotina de pulo do dinossauro
         if(Dino_pulo == 1 && ciclo_Pulo < 7){
             apagaDino(Dino_x, Dino_y);
@@ -372,23 +434,42 @@ void jogo()
         }else if(Dino_pulo == 1 && ciclo_Pulo < 11){ // para ficar um tempinho no "ar"
                 apagaDino(Dino_x, Dino_y);
                 ciclo_Pulo++;
-                }else if(Dino_pulo == 1 && ciclo_Pulo < 18){
+              }else if(Dino_pulo == 1 && ciclo_Pulo < 18){
                         apagaDino(Dino_x, Dino_y);
                         Dino_y++;
                         ciclo_Pulo++;
-                    }else if(ciclo_Pulo == 18){
+                      }else if(ciclo_Pulo == 18){
                             Dino_pulo = 0;
                             ciclo_Pulo = 0;
                             }
 
-        if(Dino_down == 0 && flag_Dino_Down == 1){
+        if(Dino_down == 1 && flag_Dino_Down == 1){
             apagaDinoDown(Dino_x, Dino_y + 2);
             flag_Dino_Down == 0;
         }
 
+//Obstaculos
+        if(Obs2.estado == 1){
+            apagaObstaculo(Obs2.x, Obs2.y, Obs2.obstaculo);
+            Obs2.x--;
+            if(Obs2.x == 0){
+                Obs2.x = 99;
+                Obs2.estado = 0;
+            }
+        }
 
-        apagaObstaculo(Obs_x, Obs_y, obstaculo);
-        Obs_x--;
+        if(Obs3.estado == 1){
+            apagaObstaculo(Obs2.x, Obs2.y, Obs2.obstaculo);
+            Obs3.x--;
+            if(Obs3.x == 0){
+                Obs3.x = 99;
+                Obs3.estado = 0;
+            }
+        }
+
+        apagaObstaculo(Obs1.x, Obs1.y, Obs1.obstaculo);
+        Obs1.x--;
+
         status.pontuacao++;
     }
 
