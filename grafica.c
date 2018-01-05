@@ -275,7 +275,7 @@ int imprimeObstaculo(int x, int y, int obstaculo, LIMITE *obs)
     case 4:
         imprimePterotactilo(x, y - 1);
         obs->superior = y;
-        obs->inferior = y + 2;
+        obs->inferior = (y - 1)+ 2;
         obs->esquerda = x + 1;
         obs->direita = x + 3;
         break;
@@ -327,27 +327,12 @@ void limiteDino(int x, int y, LIMITE *Dino, int Dino_down)
 
 int testeColisao(LIMITE Dino, LIMITE Obs)
 {
-    if((Dino.superior == Obs.inferior || Dino.superior == Obs.superior) && (Dino.superior == Obs.esquerda || Dino.superior == Obs.direita)){
-            setCursor(10,10);
-            printf("11111");
-            system("pause");
+    if(Dino.superior == Obs.inferior){
             return 1;
-    }else if((Dino.inferior == Obs.inferior || Dino.inferior == Obs.superior) && (Dino.inferior == Obs.esquerda || Dino.inferior == Obs.direita)){
-                setCursor(10,10);
-                printf("2222");
-                system("pause");
+    }else if(Dino.inferior == Obs.superior){
                 return 1;
-            }else if((Dino.direita == Obs.inferior || Dino.direita == Obs.superior) && (Dino.direita == Obs.esquerda || Dino.direita == Obs.direita)){
-                            setCursor(10,10);
-                            printf("3333");
-                            system("pause");
+            }else if(Dino.direita == Obs.esquerda && Dino.superior <= Obs.superior && Dino.inferior >= Obs.inferior){
                         return 1;
-                    }else if((Dino.esquerda == Obs.inferior || Dino.esquerda == Obs.superior) && (Dino.esquerda == Obs.esquerda || Dino.esquerda == Obs.direita)){
-
-                                setCursor(10,10);
-                                printf("4444");
-                                system("pause");
-                                return 1;
-                            }else
-                                return 0;
+                  }else
+                    return 0;
 }
