@@ -3,7 +3,7 @@
 
 #define MAX_COLUNAS 100
 #define MAX_LINHAS 20
-#define MAX_OBS 3
+#define MAX_OBS 2
 #define MAX_DIST 99
 
 typedef struct{
@@ -56,6 +56,7 @@ void carrega_jogo(void);
 void top_10(void);
 
 void ranking_scores();
+void resetaLimite(LIMITE *Obs);
 
 #endif // Rawr1.h
 
