@@ -86,7 +86,13 @@ void ranking_scores(char nome[], int pontos)
     }
 }
 
-
+void resetaLimite(LIMITE *Obs)
+{
+    Obs->direita = 0;
+    Obs->esquerda = 0;
+    Obs->superior = 0;
+    Obs->inferior = 0;
+}
 
 
 
@@ -96,8 +102,8 @@ na sequência desse texto. */
 void novo_jogo()
 {
     GAME_INFO status = {3, 0, 1};
-    OBSTACULO Obs1, Obs2, Obs3;
-    LIMITE Dino, obstaculo1, obstaculo2, obstaculo3;
+    OBSTACULO Obs1, Obs2;
+    LIMITE Dino, obstaculo1 = {0}, obstaculo2 = {0};
     srand(time(NULL));
     int Obs_min = 1, Obs_max = 5, pos_min = 25, pos_max = 75, pos = 0; // distancia minima e maxima entre os obstaculos
     int Dino_x = 15, Dino_y = 14, Dino_pulo = 0, ciclo_Pulo = 0, Dino_down = 0, ApagaUmaVez = 0;
@@ -113,9 +119,6 @@ void novo_jogo()
 
     Obs2.x = MAX_DIST;
     Obs2.estado = 0;
-
-    Obs3.x = MAX_DIST;
-
 
     system("cls");
     imprimeChao();
@@ -142,8 +145,10 @@ void novo_jogo()
             Obs1.obstaculo = Obs_min + (rand() % ((Obs_max - 2) - Obs_min + 1)); //geracao aleatoria dos obstaculos, - 1 eh para ssempre vir um obstaculo
             if(Obs1.obstaculo == 3 || Obs1.obstaculo == 4){
                 Obs1.y = 11 + (rand() % (14 - 11 + 1));         //variar a altura dos obstaculos voadores
-            }else
+            }else{
                 Obs1.y = 14;
+            }
+            resetaLimite(&obstaculo1);
             Obs1.x = MAX_DIST;
         }
 
@@ -157,39 +162,29 @@ void novo_jogo()
             Obs2.obstaculo = Obs_min + (rand() % (Obs_max - Obs_min + 1));  //geracao aleatoria dos obstaculos
             if(Obs2.obstaculo == 3 || Obs2.obstaculo == 4){
                 Obs2.y = 12 + (rand() % (14 - 12 + 1));         //variar a altura dos obstaculos voadores
-            }else
+            }else{
                 Obs2.y = 14;
+            }
             Obs2.x = MAX_DIST;
             Obs2.estado = 1;
         }
         if(Obs2.estado == 1)
             imprimeObstaculo(Obs2.x, Obs2.y, Obs2.obstaculo, &obstaculo2);
 
-//Obstaculo 3
-        if(status.nivel > 6){
 
-            if(Obs2.x == 50)
-                pos = pos_min + (rand() % (pos_max - pos_min + 1));
 
-            if(Obs2.x == pos && Obs3.estado == 0){
-                Obs3.obstaculo = Obs_min + (rand() % (Obs_max - Obs_min + 1));  //geracao aleatoria dos obstaculos
-                if(Obs3.obstaculo == 3 || Obs3.obstaculo == 4){
-                    Obs3.y = 12 + (rand() % (14 - 12 + 1));         //variar a altura dos obstaculos voadores
-                }else
-                    Obs3.y = 14;
-                Obs3.x = MAX_DIST;
-                Obs3.estado = 1;
-            }
-            if(Obs3.estado == 1)
-                imprimeObstaculo(Obs3.x, Obs3.y, Obs3.obstaculo, &obstaculo3);
-        }
+
 
 //Dinossauro
+
         if(GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_SPACE)){
             Dino_pulo = 1;
         }
 
-        Dino_down = GetKeyState(VK_DOWN) || GetKeyState('C');
+        if(GetAsyncKeyState(VK_DOWN) || GetAsyncKeyState('C'))
+            Dino_down = 1;
+        else
+            Dino_down = 0;
 
         if(Dino_pulo == 0 && Dino_down == 0){
             imprimeDino(Dino_x, Dino_y);
@@ -205,25 +200,35 @@ void novo_jogo()
                             limiteDino(Dino_x, Dino_y + 2, &Dino, Dino_down);
                         }else if(Dino_pulo == 1 && Dino_down == 0){
                                 imprimeDino(Dino_x, Dino_y);
-                                limiteDino(Dino_x, Dino_y + 2, &Dino, Dino_down);
+                                limiteDino(Dino_x, Dino_y, &Dino, Dino_down);
                               }
 
-   // if(colidiu == 0){
-     //    colisao[0] = testeColisao(Dino, obstaculo1);
-      //   colisao[1] = testeColisao(Dino, obstaculo2);
-       //  colisao[2] = testeColisao(Dino, obstaculo3);
 
-       //  for(i = 0; i < MAX_OBS; i++){
-        //    if(colisao[i] == 1){
-          //      status.vidas--;
-           //     colidiu = 1;
-          //  }
-        // }
-    //}
+    if(colidiu == 0 && (Dino_x >= (obstaculo1.esquerda - 3) && Dino_x <= obstaculo1.direita)){ //se o dinossauro estiver nos limites do obstaculo
+         colisao[0] = testeColisao(Dino, obstaculo1);                       //testa se teve colisao
 
-       // if(obstaculo1.direita < Dino.esquerda || obstaculo2.direita < Dino.esquerda || obstaculo3.direita < Dino.esquerda)
-         //   colidiu = 0;
+            if(colisao[0] == 1){
+                status.vidas--;             //se teve colisao, diminui o numero de vidas
+                colidiu = 1;
+            }
+    }
 
+            if(Dino.esquerda == obstaculo1.direita){
+                colidiu = 0;
+            }
+
+    if(colidiu == 0 && Dino_x >= (obstaculo2.esquerda - 3) && Dino_x <= obstaculo2.direita){//se o dinossauro estiver nos limites do obstaculo
+        colisao[1] = testeColisao(Dino, obstaculo2);                //testa se teve colisao
+
+        if(colisao[1] == 1){
+            status.vidas--;     //se teve colisao, diminui o numero de vidas
+            colidiu = 1;
+        }
+    }
+
+    if(Dino.esquerda == obstaculo2.direita){
+        colidiu = 0;
+    }
         Sleep(velocidade);
 
 //rotina de pulo do dinossauro
@@ -238,10 +243,13 @@ void novo_jogo()
                         apagaDino(Dino_x, Dino_y);
                         Dino_y++;
                         ciclo_Pulo++;
-                      }else if(ciclo_Pulo == 18){
-                            Dino_pulo = 0;
-                            ciclo_Pulo = 0;
-                            }
+                      }
+        if(ciclo_Pulo == 18){
+            ciclo_Pulo = 0;
+        }
+        if(ciclo_Pulo == 0){
+            Dino_pulo = 0;
+        }
 
         if(Dino_down == 1){
             apagaDinoDown(Dino_x, Dino_y + 2);
@@ -254,15 +262,7 @@ void novo_jogo()
             if(Obs2.x == 0){
                 Obs2.x = MAX_DIST;
                 Obs2.estado = 0;
-            }
-        }
-
-        if(Obs3.estado == 1){
-            apagaObstaculo(Obs2.x, Obs2.y, Obs2.obstaculo);
-            Obs3.x--;
-            if(Obs3.x == 0){
-                Obs3.x = MAX_DIST;
-                Obs3.estado = 0;
+                resetaLimite(&obstaculo2);
             }
         }
 
