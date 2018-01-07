@@ -3,6 +3,7 @@
 #include <string.h>
 #include <windows.h>
 #include <time.h>
+#include "conio2.h"
 
 #include "Rawr1.h"
 
@@ -18,23 +19,19 @@ void setCursor(int x, int y)
 void imprimeChao()
 {
     int i, j;
-
     setCursor(0, 18);
     for(i = 0; i < 3; i++){
-        for(j = 0; j < MAX_COLUNAS; j++){
-                printf("X");
+        for(j = 0; j < 99; j++){
+            textcolor(BROWN);
+            printf("%c", 177);
         }
         printf("\n");
     }
 }
 
-
-
 void apagaDino(int x, int y)
 {
     int i, j;
-
-
 
     for(i = 0; i < 4; i++){
         setCursor(x, y);
@@ -60,14 +57,61 @@ void imprimeDino(int x, int y)
         for(j = 0; j < 3; j++){
             if(i == 0 && j == 0){
                 printf(" ");
-                printf("T");
-            }else
-                printf("T");
+                textcolor(LIGHTRED);
+                printf("%c", 176);
+            }else{
+                textcolor(LIGHTRED);
+                printf("%c", 176);
+            }
         }
             printf("\n");
     }
 }
+void imprimeDinoPar(int x, int y)
+{
+    int i, j;
 
+    for(i = 0; i < 4; i++){
+        setCursor(x, y);
+        y++;
+        for(j = 0; j < 3; j++){
+            if(j == 0 && i == 0){
+                printf(" ");
+                textcolor(LIGHTRED);
+                printf("%c", 176);
+            }else if(j == 1 && i == 3){
+                    printf(" ");
+                }else{
+                    textcolor(LIGHTRED);
+                    printf("%c", 176);
+                }
+        }
+        printf("\n");
+    }
+}
+
+void imprimeDinoImpar(int x, int y)
+{
+    int i, j;
+
+    for(i = 0; i < 4; i++){
+        setCursor(x, y);
+        y++;
+        for(j = 0; j < 3; j++){
+            if(j == 0 && i == 0){
+                printf(" ");
+                textcolor(LIGHTRED);
+                printf("%c", 176);
+            }else if(j == 2 && i == 3){
+                    printf(" ");
+                }else{
+                    textcolor(LIGHTRED);
+                    printf("%c", 176);
+                }
+        }
+        printf("\n");
+    }
+}
 void imprimeDinoDown(int x, int y)
 {
     int i, j;
@@ -78,8 +122,10 @@ void imprimeDinoDown(int x, int y)
         for(j = 0; j < 5; j++){
             if(i == 1 && j > 2)
                 printf(" ");
-            else
-                printf("T");
+            else{
+                textcolor(LIGHTRED);
+                printf("%c", 176);
+            }
         }
         printf("\n");
     }
@@ -106,6 +152,7 @@ void apagaDinoDown(int x, int y)
             setCursor(x, y);
             y++;
             for(j = 0; j < 3; j++){
+                textcolor(GREEN);
                 printf("#");
             }
             printf("\n");
@@ -134,6 +181,7 @@ void imprimeAerolito(int x, int y)
         setCursor(x, y);
         y++;
         for(j = 0; j < 7; j++){
+            textcolor(DARKGRAY);
             printf("%%");
         }
         printf("\n");
@@ -165,6 +213,7 @@ void imprimePterotactilo(int x, int y)
                 printf(" ");
             }
         for(j = 0; j < 5; j++){
+            textcolor(CYAN);
             printf("%%");
         }
         printf("\n");
@@ -199,8 +248,10 @@ void imprimeCactoG(int x, int y)
         for(j = 0; j < 7; j++){
             if(j > 1 && j < 5 && i != 1)
                 printf(" ");
-            else
+            else{
+                textcolor(LIGHTGREEN);
                 printf("Y");
+                }
         }
         printf("\n");
     }
@@ -210,6 +261,7 @@ void imprimeCactoG(int x, int y)
             y++;
             printf("  ");
         for(j = 0; j < 3; j++){
+            textcolor(LIGHTGREEN);
             printf("Y");
         }
         printf("\n");
@@ -279,12 +331,6 @@ int imprimeObstaculo(int x, int y, int obstaculo, LIMITE *obs)
         obs->esquerda = x + 1;
         obs->direita = x + 3;
         break;
-    case 5:
-        obs->superior = 0;
-        obs->inferior = 0;
-        obs->esquerda = 0;
-        obs->direita = 0;
-        break;
     }
     return obstaculo;
 }
@@ -304,8 +350,6 @@ void apagaObstaculo(int x, int y, int obstaculo)
         break;
     case 4:
         apagaPterotactilo(x, y - 1);
-        break;
-    case 5:
         break;
     }
 }
