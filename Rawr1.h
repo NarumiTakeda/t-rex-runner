@@ -32,6 +32,12 @@ typedef struct{
     int direita;
 }LIMITE;
 
+typedef struct
+{
+    int pontos;
+    char nome[20];
+}RANKING;
+
 void setCursor(int x, int y);
 void imprimeChao();
 void imprimeDino(int x, int y);
@@ -55,7 +61,8 @@ void novo_jogo(void);
 void carrega_jogo(void);
 void top_10(void);
 
-void ranking_scores();
+void adiciona_score();
+void ordena_ranking(RANKING* ranking, int tamanho);
 
 #endif // Rawr1.h
 
