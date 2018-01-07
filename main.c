@@ -11,9 +11,9 @@
 int main()
 {
 
-    imprime_menu();
+    imprime_menu();  // Chamada da função que imprime o menu
 
-    setCursor(0, 24);
-    return 0;
+    setCursor(0, 24);  // Define que "return 0" ficará no canto esquerdo 
+    return 0;          // embaixo na tela
 }
 
