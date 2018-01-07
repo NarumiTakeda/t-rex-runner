@@ -144,8 +144,43 @@ void limpaMenu()
 void salvaJogo(int Dino_x, int Dino_y, int Dino_pulo, int Dino_down, int Dino_Andou, int ApagaUmaVez, OBSTACULO Obs1, OBSTACULO Obs2, int pos, GAME_INFO status)
 {
     FILE *arq;
+    SALVAR buffer;
+    char binario[5] = {".bin"};
 
+    strcat(status.nome, binario);
 
+    arq = fopen(status.nome, "wb");
+
+    if(arq == NULL){
+        setCursor(35, 0);
+        printf("Erro ao abrir o arquivo");
+    }else{
+        buffer.Dino_x = Dino_x;
+        buffer.Dino_y = Dino_y;
+        buffer.Dino_pulo = Dino_pulo;
+        buffer.Dino_down = Dino_down;
+        buffer.Dino_andou = Dino_Andou;
+        buffer.ApagaUmaVez = ApagaUmaVez;
+        buffer.Obs1_x = Obs1.x;
+        buffer.Obs1_y = Obs1.y;
+        buffer.Obs1_obstaculo = Obs1.obstaculo;
+        buffer.Obs1_estado = Obs1.estado;
+        buffer.Obs2_x = Obs2.x;
+        buffer.Obs2_y = Obs2.y;
+        buffer.Obs2_obstaculo = Obs2.obstaculo;
+        buffer.Obs2_estado = Obs2.estado;
+        buffer.pos = pos;
+        buffer.vidas = status.vidas;
+        buffer.nivel = status.nivel;
+        buffer.pontuacao = status.pontuacao;
+        strcpy(buffer.nome, status.nome);
+        if(fwrite(&buffer, sizeof(SALVAR), 1, arq) != 1){
+            setCursor(70, 0);
+            printf("Erro de escrita");
+        }
+    }
+    fclose(arq);
+	
 }
 
 
