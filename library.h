@@ -1,5 +1,5 @@
-#ifndef RAWR1_H
-#define RAWR1_H
+#ifndef LIBRARY_H
+#define LIBRARY_H
 
 #define MAX_COLUNAS 100
 #define MAX_LINHAS 20

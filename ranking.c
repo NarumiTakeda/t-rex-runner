@@ -3,7 +3,7 @@
 #include <string.h>
 #include <windows.h>
 #include <time.h>
-#include "Rawr1.h"
+#include "library.h"
 
 
 /* O programa deve pedir o nome do arquivo a ser carregado e restaurar o estado

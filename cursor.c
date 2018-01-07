@@ -3,7 +3,7 @@
 #include <string.h>
 #include <windows.h>
 #include <time.h>
-#include "Rawr1.h"
+#include "library.h"
 
 // Funções da windows.h que modificam o cursor. 
 

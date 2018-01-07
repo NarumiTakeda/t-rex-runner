@@ -3,7 +3,7 @@
 #include <string.h>
 #include <windows.h>
 #include <time.h>
-#include "Rawr1.h"
+#include "library.h"
 
 void imprimeCactoP(int x, int y)
  {
