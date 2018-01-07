@@ -1,0 +1,59 @@
+# depslib dependency file v1.0
+1515190655 source:c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\cursor.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"Rawr1.h"
+
+1515268080 c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\rawr1.h
+
+1515191857 source:c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\grafica.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"Rawr1.h"
+
+1515191856 source:c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\jogo.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"Rawr1.h"
+
+1515285534 source:c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"Rawr1.h"
+
+1515186877 source:c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\menu.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"Rawr1.h"
+
+1515176936 source:c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\obstaculo.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"Rawr1.h"
+
+1515285563 source:c:\users\narumi\documents\ufrgs\trabalho algoritmos\t-rex-runner\ranking_game.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<time.h>
+	"Rawr1.h"
+
